@@ -1,2 +1,53 @@
 # modasage
 Modasage calculates the rate of MODAFINIL in blood for any day given daily dosage. 
+
+*** LOGIC ***
+
+Moda in blood every 24h for half life = 12h and daily dosage = 25mg
+
+   L    M    X    J    V   TOTAL
+L 100	
+M 100	+25           				=125
+X 100	+6.25	+25 		      	=131.25
+J 100	+1.56	+6.25	+25		    =132.81
+V 100	+0.39	+1.56	+6.25	+25	=133.20
+
+Day 1 = 100 
+Day 2 = 100 + 1/4*100 = 125 
+Day 3 = 100 + 1/4*100 + 1/16*100 = 131,25
+Day 4 = 100 + 1/4*100 + 1/16*100 + 1/64*100 = 132,81
+Day 5 = 100 + 1/4*100 + 1/16*100 + 1/64*100 + 1/256*100 = 133,2
+...
+Day n = 100 * (1 + 1/4 + 1/16 + 1/32 + ... + 1/4^(n-1))
+
+Geometric series =  a(1-r^n)/(1-r) " r = 1/4
+
+Day n = 100 * (1 - (1/4)^n) / (1-1/4) = (4/3)*100*(1-0,25)^n) = function
+
+Day 1 = 100
+Day 2 = 125
+Day 3 = 131,25
+Day 4 = 132,81
+Day 5 = 133,20
+Day 10 = 133,33
+
+dailyDosage = 100mg
+numDays = 5
+halfLife = 12h
+rate24H = (1/2)^(24/halfLife) ***
+
+function (halfLife, dayNumber) { calculate  and return the dosis in blood for the dayNumber}
+
+for (n <= numDays) { do function and print results for each day }
+
+*** HALF LITE DAILY NORMALIZATION
+- If half life is 24h, every day you still have 50%: 100%(0h), 50%(24h)
+- If half life is 12h, every day you still have 25%: 100%(0h), 50%(12h), 25%(24h)
+- If half life is 6h, every day you still have 6.25%: 100%(0h),50%(6h),25%(12h),12.5%(18h),6.25%(24h)
+
+Half Life daily rate  = (1/2)^(24/halfLife)
+
+ASSUMPTIONS 
+v0.1 Daily dosage at same time every day (eg 6am)
+v0.1 Blood testing at same time every day (every 24h)
+v0.1 Half life = halfLife = 12h
